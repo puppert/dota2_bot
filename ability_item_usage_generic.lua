@@ -94,11 +94,6 @@ end
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 function AbilityUsageThink()
 	local npcBot = GetBot();
-	-- npcBot.ability = {};
-	-- if _G["ability"] == nil then
-		-- _G["ability"] = {};
-	-- end
-	
 	
 	if not GetBot():IsHero() then
 		return
@@ -118,10 +113,6 @@ function AbilityUsageThink()
 													end
 													)
 			TableAbility[abilityname] = ability;
-			-- npcBot.ability[abilityname] = ability;
-			-- if _G["ability"][abilityname] == nil then
-				-- _G["ability"][abilityname] = ability;
-			-- end	
 		else
 			break;
 		end
@@ -130,7 +121,6 @@ function AbilityUsageThink()
 	
 	if ( npcBot:IsUsingAbility() or npcBot:IsChanneling()) then return end;
 	
-	--print(npcBot:GetUnitName())
 	for k,v in pairs(TableAbility) do
 		local functionname = string.gsub(k,"ability","Consider");
 		if functionname == "ConsiderBlink" and v:GetName() == "antimage_blink" then
@@ -140,7 +130,6 @@ function AbilityUsageThink()
 		if v["Consider"] == nil then
 			v["Consider"] = ability_consider[functionname];
 		end
-		--print(type(v["Consider"]) );
 		if v["Consider"] ~= nil and v:IsFullyCastable() then
 			tablecast[1],tablecast[2] = v["Consider"](); 
 		else

@@ -3,6 +3,17 @@ module("ability_consider", package.seeall )
 local myutil = require(GetScriptDirectory() .. "/myutil")
 local utils = require(GetScriptDirectory() .. "/util")
 
+-- local heroes = GetTeamPlayers(TEAM_RADIANT);
+-- for _,id in ipairs(GetTeamPlayers(TEAM_DIRE)) do
+	-- table.insert(heroes,id);
+-- end
+-- if #heroes == 10 then
+	-- for k,v in ipairs(heroes) do 
+		-- local heroname = GetSelectedHeroName(v);
+		-- require(GetScriptDirectory() .. "/ability_item_usage_" .. string.gsub(heroname,"npc_dota_hero_",""));
+	--end
+-- end
+
 --abaddon
 function ConsiderDeathCoil()
 	local npcBot = GetBot();
@@ -27,7 +38,7 @@ function ConsiderDeathCoil()
 					end
 				end
 			end
-			local nTarget = myutil:ChoseEnemyTarget();
+			local nTarget = myutil:ChoseEnemyTarget(); 
 			if	nTarget ~= nil then
 				return BOT_ACTION_DESIRE_MODERATE,TableEnemyHeroes[1];
 			end

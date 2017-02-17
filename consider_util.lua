@@ -2,12 +2,11 @@ X = {}
 
 function X:ConsiderComplete(env) 
 	local npcBot = GetBot();
-	local abilityTable = npcBot["ability"];
-	
-	local TableConsider = {};
-	
-	for k,v in pairs(abilityTable)	do
-		table.insert(TableConsider,string.gsub(k,"ability","Consider"));
+	local abilityTable = {};
+	local count = 0;
+	while not GetBot():GetAbilityInSlot(count):IsTalent() do
+		table.insert(abilityTable,GetBot():GetAbilityInSlot(count));
+		count = count + 1;
 	end
 	
 	for _,name in pairs(TableConsider) do
@@ -54,19 +53,19 @@ function X:ConsiderFactory(ConsiderName)
 	local Function;
 	
 	if flagnum == 1 then
-		-- no need
+		Function = function() return 0 end
 	elseif flagnum == 2 then
-		-- no need
+		Function = function() return 0 end
 	elseif flagnum == 3 then
-		Function = self:ConsiderNoTarget();
+		Function = self.ConsiderNoTarget;
 	elseif flagnum == 4 then
-	
+		Function = self.ConsiderUnitTarget;
 	elseif flagnum == 5 then
-	
+		Function = self.ConsiderPoint;
 	elseif flagnum == 6 then
-	
+		Function = self.ConsiderAOE;
 	elseif flagnum == 7 then
-	
+
 	elseif flagnum == 8 then
 	
 	elseif flagnum == 9 then

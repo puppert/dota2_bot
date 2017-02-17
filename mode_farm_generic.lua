@@ -221,7 +221,6 @@ function Think()
 	
 	return
 end
-
 function GetSupportPoint()
 	local X = GetSupportNetral().location[1];
 	local Y = 0;
