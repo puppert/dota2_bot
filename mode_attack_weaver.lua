@@ -30,7 +30,6 @@ function GetDesire()
 		return 0;
 	end
 	
-	--print(IsLocationPassable(npcBot:GetLocation()))
 	
 	local highestDesire = 0;
 	if HarryDesire > highestDesire then

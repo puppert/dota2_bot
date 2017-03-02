@@ -14,10 +14,10 @@ end
 
 --find the farthest point to pointA in range of PointB
 function W.farthestPoint(PointA,PointB,range,distance)
-	local sdcos = (PointA[1] - PointB[1])/ distance;
-	local sdsin = (PointA[2] - PointB[2])/ distance;
+	local sdcos = (PointB[1] - PointA[1])/ distance;
+	local sdsin = (PointB[2] - PointA[2])/ distance;
 	
-	local pointC = Vector(PointB[1] - range * sdcos,PointB[2] - range * sdsin);
+	local pointC = Vector(PointB[1] + range * sdcos,PointB[2] + range * sdsin);
 	return pointC;
 
 end

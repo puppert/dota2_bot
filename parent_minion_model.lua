@@ -117,7 +117,7 @@ function  ConsiderAbility(hMinionUnit)
 
 	if hMinionUnit:GetUnitName() == "npc_dota_neutral_centaur_khan" then
 		local abilityWarStomp = hMinionUnit:GetAbilityByName("centaur_khan_war_stomp");
-		if not abilityWarStom:IsFullyCastable() then
+		if not abilityWarStomp:IsFullyCastable() then
 			return BOT_ACTION_DESIRE_NONE,0;
 		end
 		local locationAOE = hMinionUnit:FindAoELocation(true,true,hMinionUnit:GetLocation(),0,250,0,10000);
@@ -137,7 +137,7 @@ function  ConsiderAbility(hMinionUnit)
 	
 	if hMinionUnit:GetUnitName() == "npc_dota_neutral_polar_furbolg_ursa_warrior" then
 		local abilityThunderClap = hMinionUnit:GetAbilityByName("polar_furbolg_ursa_warrior_thunder_clap");
-		if not abilityThunderCla:IsFullyCastable() then
+		if not abilityThunderClap:IsFullyCastable() then
 			return BOT_ACTION_DESIRE_NONE,0;
 		end
 		local locationAOE = hMinionUnit:FindAoELocation(true,true,hMinionUnit:GetLocation(),0,300,0,10000);
