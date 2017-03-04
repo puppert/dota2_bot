@@ -1,4 +1,9 @@
-function ConsiderTango()
+module("ability_item_consider_generic",package.seeall)
+local myutil = require(string.gsub(GetScriptDirectory(),"consider","") .. "myutil");
+local utils = require(string.gsub(GetScriptDirectory(),"consider","") .. "util");
+
+
+function itemConsiderTango()
 	local npcBot = GetBot();
 	if(npcBot:HasModifier("modifier_tango_heal")) then
 		return BOT_ACTION_DESIRE_NONE,0;
@@ -25,7 +30,7 @@ function ConsiderTango()
 	return BOT_ACTION_DESIRE_NONE,0;
 end
 -------------------------------------------------------------------------------------
-function ConsiderClarity()
+function itemConsiderClarity()
 	local npcBot = GetBot();
 	if(npcBot:HasModifier("modifier_clarity_potion")) then
 		return BOT_ACTION_DESIRE_NONE,0;
@@ -38,9 +43,8 @@ function ConsiderClarity()
 	return BOT_ACTION_DESIRE_NONE,0;
 end
 ----------------------------------------------------------------------------------
-function ConsiderTpscroll()
+function itemConsiderTpscroll()
 	local npcBot = GetBot();
-	--print("tp.."..type(home.HomePosition()));
 	if(npcBot:GetActiveMode() == BOT_MODE_PUSH_TOWER_TOP
 	or npcBot:GetActiveMode() == BOT_MODE_DEFEND_TOWER_TOP
 	or npcBot:GetActiveMode() == BOT_MODE_PUSH_TOWER_MID
@@ -56,7 +60,7 @@ function ConsiderTpscroll()
 				if(GetUnitToLocationDistance(GetTower(GetTeam(),TOWER_BASE_1),GetLaneFrontLocation(GetTeam(),lane,0)) 
 					< 3000 and npcBot:DistanceFromFountain() >= 4000) then
 					
-					return BOT_ACTION_DESIRE_HIGH,home.HomePosition();
+					return BOT_ACTION_DESIRE_HIGH,GetAncient(GetTeam()):GetLocation();
 				end
 			elseif(GetUnitToUnitDistance( npcBot, tower) > 5000) then
 				
@@ -78,14 +82,14 @@ function ConsiderTpscroll()
 		if((npcBot:GetHealth() == (npcBot:GetMaxHealth()*0.3)
 		or npcBot:GetMana() == (npcBot:GetMaxMana()*0.3))
 		and npcBot:DistanceFromFountain() > 5000) then
-			return BOT_ACTION_DESIRE_MODERATE, home.HomePosition();
+			return BOT_ACTION_DESIRE_MODERATE, GetAncient(GetTeam()):GetLocation();
 		end
 	end
 	
 	return BOT_ACTION_DESIRE_NONE,0
 end
 -----------------------------------------------------------------------------------------------
-function ConsiderGhost()
+function itemConsiderGhost()
 	local npcBot = GetBot();
 	
 	local TableEnemyheroes = npcBot:GetNearbyHeroes(1300,true,BOT_MODE_NONE);
@@ -103,7 +107,7 @@ function ConsiderGhost()
 	return BOT_ACTION_DESIRE_NONE;
 end
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- ---
-function ConsiderGlimmerCape()
+function itemConsiderGlimmerCape()
 	local npcBot = GetBot();
 	
 	local TableEnemyheroes = npcBot:GetNearbyHeroes(1300,true,BOT_MODE_NONE);
@@ -128,7 +132,7 @@ function ConsiderGlimmerCape()
 	return BOT_ACTION_DESIRE_NONE,0;
 end
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- ---
-function ConsiderSheepstick()
+function itemConsiderSheepstick()
 	local npcBot = GetBot();
 	
 	local TableEnemyheroes = npcBot:GetNearbyHeroes(1300,true,BOT_MODE_NONE);
@@ -151,7 +155,7 @@ function ConsiderSheepstick()
 	return 0,0;
 end
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-function ConsiderFlask()
+function itemConsiderFlask()
 	local npcBot = GetBot();
 	if(npcBot:HasModifier("modifier_flask_healing")) then
 		return BOT_ACTION_DESIRE_NONE,0;
@@ -170,7 +174,7 @@ function ConsiderFlask()
 	return BOT_ACTION_DESIRE_NONE,0;
 end
 ----------------------------------------------------------------------------------
-function ConsiderArmlet()
+function itemConsiderArmlet()
 	local npcBot = GetBot();
 	
 	local tableNearbyEnemyHeroes = npcBot:GetNearbyHeroes(1300,true, BOT_MODE_NONE);
@@ -216,7 +220,7 @@ function ConsiderArmlet()
 	return BOT_ACTION_DESIRE_NONE;
 end
 ------------------------------------------------------------------------------------
-function ConsiderBlackKingBar()
+function itemConsiderBlackKingBar()
 	local npcBot = GetBot();
 	
 	
@@ -237,7 +241,7 @@ function ConsiderBlackKingBar()
 	return BOT_ACTION_DESIRE_NONE;
 end
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- ---
-function ConsiderBottle()
+function itemConsiderBottle()
 	local npcBot = GetBot();
 	
 	local itemBottle = "item_bottle";
@@ -276,7 +280,7 @@ function ConsiderBottle()
 	return BOT_ACTION_DESIRE_NONE,0;
 end
 -------------------------------------------------------------------------------------------------------
-function ConsiderBladeMail()
+function itemConsiderBladeMail()
 	local npcBot = GetBot();
 	
 	
@@ -296,7 +300,7 @@ function ConsiderBladeMail()
 	return BOT_ACTION_DESIRE_NONE;
 end
 ---------------------------------------------------------------------------------------
-function ConsiderShivasGuard()
+function itemConsiderShivasGuard()
 	local npcBot = GetBot();
 	
 	
@@ -312,7 +316,7 @@ function ConsiderShivasGuard()
 	return BOT_ACTION_DESIRE_NONE;
 end
 -------------------------------------------------------------------------------------------------
-function ConsiderMjollnir()
+function itemConsiderMjollnir()
 	local npcBot = GetBot();
 	
 	
@@ -325,7 +329,7 @@ function ConsiderMjollnir()
 	return BOT_ACTION_DESIRE_NONE;
 end
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-function ConsiderPowerTreads()
+function itemConsiderPowerTreads()
 	local npcBot = GetBot();
 	
 	local itemPowerTreads = "item_power_treads";
@@ -367,7 +371,7 @@ function ConsiderPowerTreads()
 	return BOT_ACTION_DESIRE_NONE;
 end
 -----------------------------------------------------------------------------------------------
-function ConsiderArcaneBoots()
+function itemConsiderArcaneBoots()
 	local npcBot = GetBot();
 	
 	
@@ -381,7 +385,7 @@ function ConsiderArcaneBoots()
 	return BOT_ACTION_DESIRE_NONE;
 end
 ----------------------------------------------------------------------------------------------------
-function ConsiderMekansm()
+function itemConsiderMekansm()
 	local npcBot = GetBot();
 	
 	
@@ -404,7 +408,7 @@ function ConsiderMekansm()
 	return BOT_ACTION_DESIRE_NONE;
 end
 -----------------------------------------------------------------------------------------------
-function ConsiderGuardianGreaves()
+function itemConsiderGuardianGreaves()
 	local npcBot = GetBot();
 	
 	
@@ -436,7 +440,7 @@ function ConsiderGuardianGreaves()
 	return BOT_ACTION_DESIRE_NONE;
 end
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
-function ConsiderMedallionOfCourage()
+function itemConsiderMedallionOfCourage()
 	local npcBot = GetBot();
 	
 	if(npcBot:GetAttackTarget() ~= nil) then
@@ -457,7 +461,7 @@ function ConsiderMedallionOfCourage()
 	return BOT_ACTION_DESIRE_NONE,0;
 end
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
-function ConsiderSolarCrest()
+function itemConsiderSolarCrest()
 	local npcBot = GetBot();
 	
 	if(npcBot:GetAttackTarget() ~= nil) then
@@ -478,7 +482,7 @@ function ConsiderSolarCrest()
 	return BOT_ACTION_DESIRE_NONE,0;
 end
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- ---k
-function ConsiderBlink()
+function itemConsiderBlink()
 	if npcBot:GetActiveMode() == BOT_MODE_ATTACK then
 		local nTarget = myutil.ChoseEnemyTarget();
 		return BOT_ACTION_DESIRE_MODERATE,nTarget:GetLocation();
@@ -491,7 +495,7 @@ function ConsiderBlink()
 	return 0,0;
 end
 ---------------------------
-function ConsiderAncientJanggo()
+function itemConsiderAncientJanggo()
 	local npcBot = GetBot() 
 	
 	if npcBot:GetActiveMode() == BOT_MODE_ATTACK then
@@ -511,7 +515,7 @@ function ConsiderAncientJanggo()
 	return BOT_ACTION_DESIRE_NONE;
 end
 -----------------------------------------------
-function ConsiderNecronomicon()
+function itemConsiderNecronomicon()
 	if npcBot:GetAttackTarget() ~= nil then
 		if npcBot:GetAttackTarget():IsHero() then
 			return BOT_ACTION_DESIRE_MODERATE;
@@ -521,7 +525,7 @@ function ConsiderNecronomicon()
 	return BOT_ACTION_DESIRE_NONE
 end
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-function ConsiderManta()
+function itemConsiderManta()
 	local npcBot = GetBot()
 	if npcBot:IsSilenced() then
 		return BOT_ACTION_DESIRE_HIGH;
@@ -536,7 +540,7 @@ function ConsiderManta()
 	return BOT_ACTION_DESIRE_NONE;
 end
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-function ConsiderHandOfMidas()
+function itemConsiderHandOfMidas()
 	local npcBot = GetBot();
 	local TableNearbyEnemyCreeps = npcBot:GetNearbyCreeps(1000,true);
 	
@@ -547,7 +551,7 @@ function ConsiderHandOfMidas()
 	return 0,0;
 end
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-function ConsiderMagicStick()
+function itemConsiderMagicStick()
 	local npcBot = GetBot()
 	local itemMagicStick = "item_magic_stick";
 	

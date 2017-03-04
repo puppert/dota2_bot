@@ -1,16 +1,12 @@
 _G._savedEnvMinion = getfenv()
 module( "parent_minion_model", package.seeall )
+local monion = require(GetScriptDirectory() .. "/minion");
+local necronomicon_archer = require(GetScriptDirectory() .. "/state/minion_ability_state/necronomicon_archer_state");
 ----------------------------------------------------------------------------------------
-attackDesire = 0;
-abilityDesire = 0 ;
-searchDesire = 0;
-followDesire = 0;
-
 --[==[
 	1.召唤单位存在 GetBot().summon里面
 	2.对仆从单位的父类，直接导入即可
-	3.有除了野怪和死灵书以外的技能想要重写，请重写ConsiderOtherAbility(hMinionUnit)
-	ExcuteOtherAbility(hMinionUnit,abilityTarget)
+	3.有除了野怪和死灵书以外的技能想要重写，请重写OtherMonion(hMinionUnit) (用/template/state_template 内的New方法生成新的子类)
 ]==]
 
 
@@ -55,10 +51,6 @@ function MinionThink(hMinionUnit)
 		highestDesire =  followDesire;
 		desiredSkill = 4;
 	end
-	
-	-- if(hMinionUnit:GetCurrentActionType() ~= BOT_ACTION_TYPE_ATTACK) then
-		-- print(hMinionUnit:GetCurrentActionType());
-	-- end
 	
 	if highestDesire == 0 then return;
     elseif desiredSkill == 1 then 
@@ -109,200 +101,13 @@ end
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 --abilityConsider
 function  ConsiderAbility(hMinionUnit)
+	hminion = minion:New();
+	hminion:sethMinionUnit(hMinionUnit);
+	necronomicon_archer.nextstate = OtherMonion(hMinionUnit) or "";
+	local aDesire,aTarget = hminion:Consider();
 	
-	local OtherDesire,OtherTarget = ConsiderOtherAbility(hMinionUnit);
-	if OtherDesire ~= BOT_ACTION_DESIRE_NONE then
-		return OtherDesire,OtherTarget;
-	end
-
-	if hMinionUnit:GetUnitName() == "npc_dota_neutral_centaur_khan" then
-		local abilityWarStomp = hMinionUnit:GetAbilityByName("centaur_khan_war_stomp");
-		if not abilityWarStomp:IsFullyCastable() then
-			return BOT_ACTION_DESIRE_NONE,0;
-		end
-		local locationAOE = hMinionUnit:FindAoELocation(true,true,hMinionUnit:GetLocation(),0,250,0,10000);
-		if locationAOE.count >= 2 then
-			return BOT_ACTION_DESIRE_HIGH,0;
-		end
-		local TableNearbyEnemyHeroes = hMinionUnit:GetNearbyHeroes(800,true,BOT_MODE_NONE );
-		if TableNearbyEnemyHeroes[1] ~= nil then
-			for k,v in ipairs(TableNearbyEnemyHeroes) do
-				if v:IsChanneling() then
-					return BOT_ACTION_DESIRE_HIGH,v;
-				end
-			end
-			return BOT_ACTION_DESIRE_MODERATE,TableNearbyEnemyHeroes[1];
-		end
-	end
-	
-	if hMinionUnit:GetUnitName() == "npc_dota_neutral_polar_furbolg_ursa_warrior" then
-		local abilityThunderClap = hMinionUnit:GetAbilityByName("polar_furbolg_ursa_warrior_thunder_clap");
-		if not abilityThunderClap:IsFullyCastable() then
-			return BOT_ACTION_DESIRE_NONE,0;
-		end
-		local locationAOE = hMinionUnit:FindAoELocation(true,true,hMinionUnit:GetLocation(),0,300,0,10000);
-		if locationAOE.count >= 2 then
-			return BOT_ACTION_DESIRE_HIGH,0;
-		end
-		local TableNearbyEnemyHeroes = hMinionUnit:GetNearbyHeroes(800,true,BOT_MODE_NONE );
-		if TableNearbyEnemyHeroes[1] ~= nil then
-			return BOT_ACTION_DESIRE_MODERATE,TableNearbyEnemyHeroes[1];
-		end
-	end
-	
-	if hMinionUnit:GetUnitName() == "npc_dota_neutral_mud_golem" 
-	or hMinionUnit:GetUnitName() == "npc_dota_neutral_mud_golem_split" then
-		local abilityHurlBoulder = hMinionUnit:GetAbilityByName("mud_golem_hurl_boulder");
-		if not abilityHurlBoulder:IsFullyCastable() then
-			return BOT_ACTION_DESIRE_NONE,0;
-		end
-		local TableNearbyEnemyHeroes = hMinionUnit:GetNearbyHeroes(800,true,BOT_MODE_NONE );
-		if TableNearbyEnemyHeroes[1] ~= nil then
-			for k,v in ipairs(TableNearbyEnemyHeroes) do
-				if v:IsChanneling() then
-					return BOT_ACTION_DESIRE_HIGH,v;
-				end
-			end
-			return BOT_ACTION_DESIRE_MODERATE,TableNearbyEnemyHeroes[1];
-		end
-	end
-	
-	if hMinionUnit:GetUnitName() == "npc_dota_neutral_ogre_magi" then
-		local abilityFrostArmor = hMinionUnit:GetAbilityByName("ogre_magi_frost_armor");
-		if not abilityFrostArmor:IsFullyCastable() then
-			return BOT_ACTION_DESIRE_NONE,0;
-		end
-		local TableNearbyFriendlyHeroes = hMinionUnit:GetNearbyHeroes(800,false,BOT_MODE_NONE );
-		if TableNearbyFriendlyHeroes[1] ~= nil then
-			for k,v in ipairs(TableNearbyFriendlyHeroes) do
-				if not v:HasModifier("modifier_ogre_magi_frost_armor") then
-					return BOT_ACTION_DESIRE_MODERATE,v;
-				end
-			end
-		end
-	end
-	
-	if hMinionUnit:GetUnitName() == "npc_dota_neutral_satyr_soulstealer" then
-		local abilityManaBurn = hMinionUnit:GetAbilityByName("satyr_soulstealer_mana_burn");
-		if not abilityManaBurn:IsFullyCastable() then
-			return BOT_ACTION_DESIRE_NONE,0;
-		end
-		local TableNearbyEnemyHeroes = hMinionUnit:GetNearbyHeroes(800,true,BOT_MODE_NONE );
-		if TableNearbyEnemyHeroes[1] ~= nil then
-			return BOT_ACTION_DESIRE_MODERATE,TableNearbyEnemyHeroes[1];
-		end
-	end
-	
-	if hMinionUnit:GetUnitName() == "npc_dota_neutral_satyr_hellcaller" then
-		local abilityShockWave = hMinionUnit:GetAbilityByName("satyr_hellcaller_shockwave");
-		if not abilityShockWave:IsFullyCastable() then
-			return BOT_ACTION_DESIRE_NONE,0;
-		end
-		local locationAOE = hMinionUnit:FindAoELocation(true,true,hMinionUnit:GetLocation(),1250,180,0,10000);
-		if locationAOE.count >= 2 then
-			return BOT_ACTION_DESIRE_HIGH,locationAOE.targetloc;
-		end
-		local TableNearbyEnemyHeroes = hMinionUnit:GetNearbyHeroes(800,true,BOT_MODE_NONE );
-		if TableNearbyEnemyHeroes[1] ~= nil then
-			return BOT_ACTION_DESIRE_MODERATE,TableNearbyEnemyHeroes[1]:GetLocation();
-		end
-	end
-	
-	if hMinionUnit:GetUnitName() == "npc_dota_neutral_dark_troll_warlord" then
-		local abilityEnsnare = hMinionUnit:GetAbilityByName("dark_troll_warlord_ensnare");
-		if not abilityEnsnare:IsFullyCastable() then
-			return BOT_ACTION_DESIRE_NONE,0;
-		end
-		if GetBot():GetTarget() ~= nil then
-			local nTarget = GetBot():GetTarget();
-			if nTarget:IsHero() and GetTeamForPlayer(nTarget:GetPlayerID()) == GetOpposingTeam() then
-				return BOT_ACTION_DESIRE_MODERATE,nTarget;
-			end
-		end
-		local TableNearbyEnemyHeroes = hMinionUnit:GetNearbyHeroes(800,true,BOT_MODE_NONE);
-		if TableNearbyEnemyHeroes[1] ~= nil then
-			return BOT_ACTION_DESIRE_MODERATE,TableNearbyEnemyHeroes[1];
-		end
-		
-		local abilityRaiseDead = hMinionUnit:GetAbilityByName("dark_troll_warlord_raise_dead");
-		if not abilityRaiseDead:IsFullyCastable() then
-			return BOT_ACTION_DESIRE_NONE,0;
-		end
-		if not abilityEnsnare:IsFullyCastable() and abilityRaiseDead:IsFullyCastable() then
-			return BOT_ACTION_DESIRE_MODERATE,0;
-		end
-	end
-	
-	if hMinionUnit:GetUnitName() == "npc_dota_neutral_satyr_trickster" then
-		local abilityPurge = hMinionUnit:GetAbilityByName("satyr_trickster_purge");
-		if not abilityPurge:IsFullyCastable() then
-			return BOT_ACTION_DESIRE_NONE,0;
-		end
-		if GetBot():GetTarget() ~= nil then
-			local nTarget = GetBot():GetTarget();
-			if nTarget:IsHero() and GetTeamForPlayer(nTarget:GetPlayerID()) == GetOpposingTeam() then
-				return BOT_ACTION_DESIRE_MODERATE,nTarget;
-			end
-		end
-		local TableNearbyEnemyHeroes = hMinionUnit:GetNearbyHeroes(800,true,BOT_MODE_NONE);
-		if TableNearbyEnemyHeroes[1] ~= nil then
-			return BOT_ACTION_DESIRE_MODERATE,TableNearbyEnemyHeroes[1];
-		end 
-	end
-	
-	if hMinionUnit:GetUnitName() == "npc_dota_neutral_forest_troll_high_priest" then
-		local abilityPriestHeal = hMinionUnit:GetAbilityByName("forest_troll_high_priest_heal");
-		if not abilityPriestHeal:IsFullyCastable() then
-			return BOT_ACTION_DESIRE_NONE,0;
-		end
-		local TableNearbyFriendlyHeroes = hMinionUnit:GetNearbyHeroes(800,false,BOT_MODE_NONE );
-		if TableNearbyFriendlyHeroes[1] ~= nil then
-			for k,v in ipairs(TableNearbyFriendlyHeroes) do
-				if v:GetHealth() < v:GetMaxHealth() then
-					return BOT_ACTION_DESIRE_MODERATE,v;
-				end
-			end
-		end
-	end
-	
-	if hMinionUnit:GetUnitName() == "npc_dota_neutral_harpy_storm" then
-		local abilityChainLightning = hMinionUnit:GetAbilityByName("harpy_storm_chain_lightning");
-		if not abilityChainLightning:IsFullyCastable() then
-			return BOT_ACTION_DESIRE_NONE,0;
-		end
-		if GetBot():GetTarget() ~= nil then
-			local nTarget = GetBot():GetTarget();
-			if nTarget:IsHero() and GetTeamForPlayer(nTarget:GetPlayerID()) == GetOpposingTeam() then
-				return BOT_ACTION_DESIRE_MODERATE,nTarget;
-			end
-		end
-		local TableNearbyEnemyHeroes = hMinionUnit:GetNearbyHeroes(800,true,BOT_MODE_NONE);
-		if TableNearbyEnemyHeroes[1] ~= nil then
-			return BOT_ACTION_DESIRE_MODERATE,TableNearbyEnemyHeroes[1];
-		else
-			local TableNearbyEnemies = hMinionUnit:GetNearbyCreeps(800,true);
-			if #TableNearbyEnemies >= 2 then
-				return BOT_ACTION_DESIRE_MODERATE,TableNearbyEnemies[1];
-			end
-		end
-	end
-	
-	if string.find(hMinionUnit:GetUnitName(),"npc_dota_necronomicon_archer") ~= nil then
-		abilityNecManaBurn = hMinionUnit:GetAbilityByName("necronomicon_archer_mana_burn");
-		if not abilityNecManaBurn:IsFullyCastable() then
-			return BOT_ACTION_DESIRE_NONE,0;
-		end
-		if GetBot():GetTarget() ~= nil then
-			local nTarget = GetBot():GetTarget();
-			if nTarget:IsHero() and GetTeamForPlayer(nTarget:GetPlayerID()) == GetOpposingTeam() 
-			and not nTarget:IsMagicImmune() then
-				return BOT_ACTION_DESIRE_MODERATE,nTarget;
-			end
-		end
-		local TableNearbyEnemyHeroes = hMinionUnit:GetNearbyHeroes(800,true,BOT_MODE_NONE);
-		if TableNearbyEnemyHeroes[1] ~= nil and not nTarget:IsMagicImmune() then
-			return BOT_ACTION_DESIRE_MODERATE,TableNearbyEnemyHeroes[1];
-		end
+	if aDesire ~= nil then
+		return aDesire,aTarget;
 	end
 	
 	return BOT_ACTION_DESIRE_NONE,0;
@@ -330,77 +135,8 @@ end
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 --abilityExcute
 function  ExecuteAbility(hMinionUnit, abilityTarget)
-	if hMinionUnit:GetUnitName() == "npc_dota_neutral_centaur_khan" then
-		local abilityWarStomp = hMinionUnit:GetAbilityByName("centaur_khan_war_stomp");
-		if abilityTarget == 0 then
-			hMinionUnit:Action_UseAbility(abilityWarStomp);
-		elseif GetUnitToUnitDistance(hMinionUnit,abilityTarget) > 200 then
-			hMinionUnit:Action_MoveToUnit(abilityTarget);
-		elseif GetUnitToUnitDistance(hMinionUnit,abilityTarget) <= 200 then
-			hMinionUnit:Action_UseAbility(abilityWarStomp);
-		end
-	end
-	
-	if hMinionUnit:GetUnitName() == "npc_dota_neutral_polar_furbolg_ursa_warrior" then
-		local abilityThunderClap = hMinionUnit:GetAbilityByName("polar_furbolg_ursa_warrior_thunder_clap");
-		if abilityTarget == 0 then
-			hMinionUnit:Action_UseAbility(abilityThunderClap);
-		elseif GetUnitToUnitDistance(hMinionUnit,abilityTarget) <= 250 then
-			hMinionUnit:Action_UseAbility(abilityThunderClap);
-		end
-	end
-	
-	if hMinionUnit:GetUnitName() == "npc_dota_neutral_polar_furbolg_ursa_warrior" then
-		local abilityHurlBoulder = hMinionUnit:GetAbilityByName("mud_golem_hurl_boulder");
-		hMinionUnit:Action_UseAbilityOnEntity(abilityHurlBoulder,abilityTarget);
-	end
-	
-	if hMinionUnit:GetUnitName() == "npc_dota_neutral_ogre_magi" then
-		local abilityFrostArmor = hMinionUnit:GetAbilityByName("ogre_magi_frost_armor");
-		hMinionUnit:Action_UseAbilityOnEntity(abilityFrostArmor,abilityTarget);
-	end
-	
-	if hMinionUnit:GetUnitName() == "npc_dota_neutral_satyr_soulstealer" then
-		local abilityManaBurn = hMinionUnit:GetAbilityByName("satyr_soulstealer_mana_burn");
-		hMinionUnit:Action_UseAbilityOnEntity(abilityManaBurn,abilityTarget);
-	end
-	
-	if hMinionUnit:GetUnitName() == "npc_dota_neutral_satyr_hellcaller" then
-		local abilityShockWave = hMinionUnit:GetAbilityByName("satyr_hellcaller_shockwave");
-		hMinionUnit:Action_UseAbilityOnLocation(abilityShockWave,abilityTarget);
-	end
-	
-	if hMinionUnit:GetUnitName() == "npc_dota_neutral_dark_troll_warlord" then
-		local abilityEnsnare = hMinionUnit:GetAbilityByName("dark_troll_warlord_ensnare");
-		local abilityRaiseDead = hMinionUnit:GetAbilityByName("dark_troll_warlord_raise_dead");
-		if abilityTarget == 0 then
-			hMinionUnit:Action_UseAbility(abilityRaiseDead);
-		else
-			hMinionUnit:Action_UseAbilityOnEntity(abilityEnsnare);
-		end
-	end
-	
-	if hMinionUnit:GetUnitName() == "npc_dota_neutral_satyr_trickster" then
-		local abilityPurge = hMinionUnit:GetAbilityByName("satyr_trickster_purge");
-		hMinionUnit:Action_UseAbilityOnEntity(abilityPurge);
-	end
-	
-	if hMinionUnit:GetUnitName() == "npc_dota_neutral_forest_troll_high_priest" then
-		local abilityPriestHeal = hMinionUnit:GetAbilityByName("forest_troll_high_priest_heal");
-		hMinionUnit:Action_UseAbilityOnEntity(abilityPriestHeal,abilityTarget);
-	end
-	
-	if hMinionUnit:GetUnitName() == "npc_dota_neutral_harpy_storm" then
-		local abilityChainLightning = hMinionUnit:GetAbilityByName("harpy_storm_chain_lightning");
-		hMinionUnit:Action_UseAbilityOnEntity(abilityChainLightning,abilityTarget);
-	end
-	
-	if string.find(hMinionUnit:GetUnitName(),"npc_dota_necronomicon_archer") ~= nil then
-		abilityNecManaBurn = hMinionUnit:GetAbilityByName("necronomicon_archer_mana_burn");
-		hMinionUnit:Action_UseAbilityOnEntity(abilityNecManaBurn);
-	end
-	
-	ExcuteOtherAbility(hMinionUnit,abilityTarget);
+	hminion:setTarget(abilityTarget);
+	hminion:Excute();
 end
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -
 --searchExcute
@@ -415,14 +151,9 @@ function  ExecuteFollow(hMinionUnit, followTarget)
 end
 
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-function  ConsiderOtherAbility(hMinionUnit)
-	-- plz rewrite this
-	return 0,0;
-end
--- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+function OtherMonion(hMinionUnit)
 
-function  ExcuteOtherAbility(hMinionUnit,abilityTarget)
-	--plz rewrite this if you want to use yout own ability
+	return nil;
 end
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 

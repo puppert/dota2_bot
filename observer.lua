@@ -2,6 +2,7 @@ local Observer = {};
 --[==[
 	提供了其他友方机器人对当前脚本机器人行为的相应。
 	用new方法生成子类以后，请重写
+	function Observer:setNotifier()  （当需要机器人响应玩家时重写）设置观察者，默认返回GetBot()
 	function Observer:setDelegate(MemberList)	返回Delegate的table
 	function Observer:setNotifyMes()	用于设置通知信息储存在当前脚本运行者的handle内（GetBot.nMes）
 	function Observer:condition()		设置通知条件，返回boolean
@@ -16,15 +17,21 @@ end
 
 
 function Observer:main()
-	local npcBot = GetBot();
+	local npcBot = self:setNotifier();
 	
-	self:initialize();
-	self:setNotifyMes();
+	self:initialize(npcBot);
+	self:setNotifyMes(npcBot);
 	
 	local MemberList = GetUnitList(UNIT_LIST_ALLIED_HEROES);
 	for k,v in ipairs(MemberList) do 
-		if v:GetUnitName() == npcBot:GetUnitName() or not v:IsBot() then
-			table.remove(MemberList,k)
+		if npcBot:IsBot() then
+			if v:GetUnitName() == npcBot:GetUnitName() or not v:IsBot() then
+				table.remove(MemberList,k)
+			end
+		else
+			if not v:IsBot() then
+				table.remove(MemberList,k)
+			end
 		end
 	end
 	npcBot.update = self:setDelegate(MemberList);
@@ -34,8 +41,7 @@ function Observer:main()
 	end
 end
 
-function Observer:initialize()
-	local npcBot = GetBot();
+function Observer:initialize(npcBot)
 	if npcBot.notify == nil then
 		npcBot.notify = function()
 			if npcBot.update ~= nil then				
@@ -47,14 +53,19 @@ function Observer:initialize()
 	end
 end
 
+function Observer:setNotifier()
+	--OverWrite
+	return GetBot();
+end
+
 function Observer:setDelegate(MemberList)
 	--OverWrite
 	return {};
 end
 
-function Observer:setNotifyMes()
+function Observer:setNotifyMes(npcBot)
 	--OverWrite
-	GetBot().nMes = "";
+	npcBot.nMes = "";
 end
 
 function Observer:condition()

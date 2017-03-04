@@ -1,6 +1,7 @@
 _G._savedEnv = getfenv()
 module( "ability_item_usage_generic", package.seeall )
 local support = require(GetScriptDirectory().."/support_item")
+local talent_factory = require(GetScriptDirectory().."/factory/talent_factory")
 local assembly_shop = require(GetScriptDirectory().."/assembly_shop")
 local action_template = require(GetScriptDirectory().."/template/ability_item_action_template")
 
@@ -9,56 +10,48 @@ function BuybackUsageThink()
 
 end
 function AbilityLevelUpThink()
-	if GetBot().Talent == nil then
-		GetBot().Talent = {};
-		local count = 0;
-		while GetBot():GetAbilityInSlot(count) ~= nil do
-			local ability = GetBot():GetAbilityInSlot(count);
-			if ability:IsTalent() then
-				table.insert(GetBot().Talent,ability:GetName());
-			end
-			count = count + 1;
-		end
+	local npcBot = GetBot()
+	if npcBot.Talent == nil then
+		npcBot.Talent = talent_factory:CreatTable();
 	end
-	 if not GetBot():IsHero() or GetBot().character == nil then
+	 if not npcBot:IsHero() or npcBot.character == nil then
 		return
 	 end
-	 if GetBot().BotAbilityPriority == nil and GetBot():IsHero() then
-		 local build = require(GetScriptDirectory() .. "/builds/item_build_" .. string.gsub(GetBot():GetUnitName(), "npc_dota_hero_", ""))
-		 GetBot().BotAbilityPriority = build[GetBot().character.."_skills"]
+	 if npcBot.BotAbilityPriority == nil and npcBot:IsHero() then
+		 local build = require(GetScriptDirectory() .. "/builds/item_build_" .. string.gsub(npcBot:GetUnitName(), "npc_dota_hero_", ""))
+		 npcBot.BotAbilityPriority = build[npcBot.character.."_skills"]
 	 end
 	 
-	 if (#GetBot().BotAbilityPriority > (25 - GetBot():GetLevel())) then  
-        local ability_name = GetBot().BotAbilityPriority[1];
+	 if (#npcBot.BotAbilityPriority > (25 - npcBot:GetLevel())) then  
+        local ability_name = npcBot.BotAbilityPriority[1];
 		--print(ability_name);
         -- Can I slot a skill with this skill point?
 		if type(ability_name) == "string" then
 			if ability_name ~= "-1" then
-				if GetBot():HasScepter() and ability_name == "keeper_of_the_light_illuminate" then
+				if npcBot:HasScepter() and ability_name == "keeper_of_the_light_illuminate" then
 					ability_name = "keeper_of_the_light_spirit_form_illuminate";
 				end
-				local ability = GetBot():GetAbilityByName(ability_name);
+				local ability = npcBot:GetAbilityByName(ability_name);
 					
 				if( ability:CanAbilityBeUpgraded() and ability:GetLevel() < ability:GetMaxLevel())  
 				then
 					local currentLevel = ability:GetLevel();
-					GetBot():ActionImmediate_LevelAbility(GetBot().BotAbilityPriority[1]);
+					npcBot:ActionImmediate_LevelAbility(npcBot.BotAbilityPriority[1]);
 					if ability:GetLevel() > currentLevel then
-						table.remove(GetBot().BotAbilityPriority,1)
+						table.remove(npcBot.BotAbilityPriority,1)
 					else
 					end
 				end
 			else
-				table.remove(GetBot().BotAbilityPriority,1)
+				table.remove(npcBot.BotAbilityPriority,1)
 			end
 		elseif type(ability_name) == "number" then
-			local ability = GetBot():GetAbilityByName(GetBot().Talent[ability_name]);
-			if( ability:CanAbilityBeUpgraded() and ability:GetLevel() < ability:GetMaxLevel())  
-			then
+			local ability = npcBot.Talent[ability_name];
+			if ability:CanAbilityBeUpgraded() then
 				local currentLevel = ability:GetLevel();
-				GetBot():ActionImmediate_LevelAbility(GetBot().Talent[ability_name]);
+				npcBot:ActionImmediate_LevelAbility(ability:GetName());
 				if ability:GetLevel() > currentLevel then
-					table.remove(GetBot().BotAbilityPriority,1)
+					table.remove(npcBot.BotAbilityPriority,1)
 				end
 			end
 		end
