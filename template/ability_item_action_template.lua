@@ -1,7 +1,17 @@
 local template = {};
 
-function template:ActionTemplate(cast,Table)
+function template:ActionTemplate(Table)
 	local npcBot = GetBot();
+	local cast = {};
+	for k,v in pairs(Table) do
+		local tablecast = {};
+		if v["Consider"] ~= nil and v:IsFullyCastable() then
+			tablecast[1],tablecast[2] = v["Consider"](); 
+		else
+			tablecast[1],tablecast[2] = 0, 0;
+		end
+		cast[k] = tablecast;
+	end
 	local TableKey = {};
 	for k,v in pairs(cast) do
 		table.insert(TableKey,k);

@@ -1,9 +1,8 @@
-local Factory = {};
+Factory = {};
 
-function Factory:New(o)
-	o = o or {};
-	setmetatable(o,self);
-	self._index = self
+function Factory:New()
+	o = {};
+	setmetatable(o,{__index = self});
 	return o;
 end
 
@@ -12,6 +11,9 @@ function Factory:CreatTable()
 	local count = 0;
 	while true do
 		local object = self:GetObject(count);
+		-- if object ~= nil then
+			-- --print(object:GetName());
+		-- end
 		if self:SetCondition(object) then
 			local heroname = string.gsub(GetBot():GetUnitName(),"npc_dota_hero_","");
 			local  name = string.gsub(object:GetName(),heroname,"ability");
@@ -32,11 +34,11 @@ function Factory:GetObject(count)
 	return GetBot():GetAbilityInSlot(count);
 end
 
-function Factory:SetCondition(Object)
+function Factory:SetCondition(c)
 	return false;
 end
 
-function Factory:SetBreakCondition(Object)
+function Factory:SetBreakCondition(bc)
 	return false;
 end
 

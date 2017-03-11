@@ -1,6 +1,6 @@
 local Monion = {}
 
-function State:New(o)
+function Monion:New(o)
 	o = o or {};
 	setmetatable(o,self)
 	self._index = self;

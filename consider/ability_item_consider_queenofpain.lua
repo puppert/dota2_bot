@@ -1,3 +1,4 @@
+X = {};
 local utils = require(GetScriptDirectory() .. "/util")
 local myutil = require(GetScriptDirectory() .. "/myutil")
 
@@ -7,7 +8,7 @@ end
 function CanCastSonicOnTarget( npcTarget )
 	return npcTarget:CanBeSeen() and npcTarget:IsHero() and not npcTarget:IsMagicImmune() and not npcTarget:IsInvulnerable();
 end
-function abilityConsiderShadowStrike()
+function X:abilityConsiderShadowStrike()
 	-- for k,v in pairs(GetBot().ability) do
 		-- print(k);
 	-- end
@@ -54,7 +55,7 @@ function abilityConsiderShadowStrike()
 	
 	return BOT_ACTION_DESIRE_NONE,0;
 end
-function abilityConsiderScreamOfPain()
+function X:abilityConsiderScreamOfPain()
 	local npcBot = GetBot();
 	
 	local abilityScreamOfPain = npcBot:GetAbilityByName("queenofpain_scream_of_pain")
@@ -117,7 +118,7 @@ function abilityConsiderScreamOfPain()
 	
 	return 	BOT_ACTION_DESIRE_NONE;
 end	
-function abilityConsiderBlink()
+function X:abilityConsiderBlink()
 	local npcBot = GetBot();
 	
 	local abilityBlink = npcBot:GetAbilityByName("queenofpain_blink")
@@ -201,7 +202,7 @@ function abilityConsiderBlink()
 	
 	return BOT_ACTION_DESIRE_NONE;
 end
-function abilityConsiderSonicWave()
+function X:abilityConsiderSonicWave()
 	local npcBot = GetBot();
 	local abilitySonicWave = npcBot:GetAbilityByName("queenofpain_sonic_wave")
 	
@@ -227,3 +228,5 @@ function abilityConsiderSonicWave()
 	end
 	return BOT_ACTION_DESIRE_NONE;
 end
+
+return X;

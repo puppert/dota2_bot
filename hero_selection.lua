@@ -9,9 +9,9 @@ requiredHeroes = {
 	'npc_dota_hero_lycan',
 	'npc_dota_hero_nyx_assassin',
 	'npc_dota_hero_keeper_of_the_light',
-	'npc_dota_hero_weaver',
+	-- 'npc_dota_hero_weaver',
 	-- 'npc_dota_hero_abaddon',
-	-- 'npc_dota_hero_visage',
+	'npc_dota_hero_visage',
 	--'npc_dota_hero_earth_spirit',
 };
 

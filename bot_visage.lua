@@ -1,5 +1,5 @@
 require(GetScriptDirectory() .. "/parent_minion_model")
-local state_template = require(GetScriptDirectory() .. "/state/state_template")
+local state_template = require(GetScriptDirectory() .. "/template/state_template")
 --print(#W);
 ----------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------
@@ -10,6 +10,9 @@ function OtherMonion(hMinionUnit)
 	familiar_state.aName = "visage_summon_familiars_stone_form";
 	
 	function familiar_state:specificConsider(hMinionUnit)
+		print(self.ability:GetAOERadius());
+		
+		
 		local EnemyHeroes = GetUnitList(UNIT_LIST_ENEMY_HEROES)
 		table.sort(EnemyHeroes,function(a,b) 
 		return GetUnitToLocationDistance(hMinionUnit,a:GetLocation()) 

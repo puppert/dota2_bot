@@ -1,6 +1,3 @@
-local utils = require(GetScriptDirectory() .. "/util")
-local myutil = require(GetScriptDirectory() .. "/myutil")
-local home = require(GetScriptDirectory().."/constant_each_side")
 require( GetScriptDirectory().."/ability_item_usage_generic" )
 ----------------------------------------------------------------------------------------------------
 

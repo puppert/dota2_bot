@@ -1,3 +1,4 @@
+X = {};
 local myutil = require(GetScriptDirectory().."/myutil")
 local util = require(GetScriptDirectory().."/util")
 
@@ -6,7 +7,7 @@ function CanCastAbility(target)
 	return target:IsHero() and GetTeamForPlayer(target:GetPlayerID()) ~= GetTeam() 
 			and not target:IsMagicImmune();
 end
-function abilityConsiderIllumiante()
+function X:abilityConsiderIllumiante()
 	local npcBot = GetBot();
 	
 	local abilityIlluminate = npcBot:GetAbilityByName("keeper_of_the_light_illuminate")
@@ -59,7 +60,7 @@ function abilityConsiderIllumiante()
 	
 	return BOT_ACTION_DESIRE_NONE,0;
 end
-function abilityConsiderManaLeak()
+function X:abilityConsiderManaLeak()
 	local npcBot = GetBot();
 	 
 	local abilityManaLeak = npcBot:GetAbilityByName("keeper_of_the_light_mana_leak")
@@ -119,7 +120,7 @@ function abilityConsiderManaLeak()
 	end
 	return BOT_ACTION_DESIRE_NONE,0;
 end
-function abilityConsiderChakraMagic()
+function X:abilityConsiderChakraMagic()
 	local npcBot= GetBot();
 	local abilityChakraMagic = npcBot:GetAbilityByName("keeper_of_the_light_chakra_magic")
 	
@@ -134,7 +135,7 @@ end
 function CompareMana(a,b)
 	return a:GetMana()/a:GetMaxMana() < b:GetMana()/b:GetMaxMana();
 end
-function abilityConsiderSpiritForm()
+function X:abilityConsiderSpiritForm()
 	local npcBot = GetBot();
 	
 	local abilitySpiritForm = npcBot:GetAbilityByName("keeper_of_the_light_spirit_form")
@@ -149,7 +150,7 @@ function abilityConsiderSpiritForm()
 	
 	return BOT_ACTION_DESIRE_NONE;
 end
-function abilityConsiderRecall()
+function X:abilityConsiderRecall()
 	local npcBot = GetBot();
 	
 	local abilityRecall = npcBot:GetAbilityByName("keeper_of_the_light_recall")
@@ -160,7 +161,7 @@ function abilityConsiderRecall()
 	
 	return BOT_ACTION_DESIRE_NONE,0;
 end
-function abilityConsiderBlindingLight()
+function X:abilityConsiderBlindingLight()
 	local npcBot = GetBot();
 	
 	local abilityBlindingLight = npcBot:GetAbilityByName("keeper_of_the_light_blinding_light")
@@ -207,7 +208,7 @@ function abilityConsiderBlindingLight()
 	
 	return BOT_ACTION_DESIRE_NONE,0;
 end
-function abilityConsiderIllumianteEnd()
+function X:abilityConsiderIllumianteEnd()
 	local npcBot = GetBot();
 	local abilityIlluminate = npcBot:GetAbilityByName("keeper_of_the_light_illuminate")
 	if not abilityIlluminate:IsChanneling()  then
@@ -247,7 +248,7 @@ function abilityConsiderIllumianteEnd()
 	end
 	return BOT_ACTION_DESIRE_NONE;
 end
-function abilityConsiderSpiritFormIlluminate()
+function X:abilityConsiderSpiritFormIlluminate()
 	local npcBot = GetBot();
 	if not npcBot:HasModifier("modifier_keeper_of_the_light_spirit_form") then
 		return BOT_ACTION_DESIRE_NONE,0;
@@ -296,7 +297,7 @@ function abilityConsiderSpiritFormIlluminate()
 	
 	return BOT_ACTION_DESIRE_NONE,0;
 end
-function abilityConsiderSpiritFormIlluminateEnd()
+function X:abilityConsiderSpiritFormIlluminateEnd()
 	local npcBot = GetBot();
 	local abilitySpiritFormIlluminate = npcBot:GetAbilityByName("keeper_of_the_light_spirit_form_illuminate")
 	if not abilitySpiritFormIlluminate:IsChanneling() then
@@ -331,3 +332,5 @@ function abilityConsiderSpiritFormIlluminateEnd()
 	end
 	return BOT_ACTION_DESIRE_NONE;
 end
+
+return X;

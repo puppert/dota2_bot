@@ -1,22 +1,41 @@
-local factory = require(GetScriptDirectory().."/factory_parrent")
+factory = require(GetScriptDirectory().."/factory/factory_parrent")
 
-local Factory = factory:New();
 
-function Factory:GetObject(count)
+-- factory = {};
+-- function factory:New()
+	-- o = {};
+	-- setmetatable(o,{__index = self});
+	-- return o;
+-- end
+
+-- function factory:CreatTable()
+	-- print("123")
+-- end
+
+F = factory:New();
+-- print(getmetatable(F)._index)
+-- print(factory)
+-- print(getmetatable(Factory)._index)
+print(type(F["CreatTable"]))
+
+
+function F:GetObject(count)
 	return GetBot():GetAbilityInSlot(count);
 end
 
-function Factory:SetCondition(Object)
-	return Object:IsTalent();
+function F:SetCondition(c)
+	if c == nil then
+		return false;
+	end
+	return c:IsTalent();
 end
 
-function Factory:SetBreakCondition(Object)
-	if Object == nil then
+function F:SetBreakCondition(bc)
+	if bc == nil then
 		return true
 	else
 		return false
 	end
 end
 
-
-return Factory;
+return F;

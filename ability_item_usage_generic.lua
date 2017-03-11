@@ -11,6 +11,7 @@ function BuybackUsageThink()
 end
 function AbilityLevelUpThink()
 	local npcBot = GetBot()
+	
 	if npcBot.Talent == nil then
 		npcBot.Talent = talent_factory:CreatTable();
 	end
@@ -19,13 +20,16 @@ function AbilityLevelUpThink()
 	 end
 	 if npcBot.BotAbilityPriority == nil and npcBot:IsHero() then
 		 local build = require(GetScriptDirectory() .. "/builds/item_build_" .. string.gsub(npcBot:GetUnitName(), "npc_dota_hero_", ""))
-		 npcBot.BotAbilityPriority = build[npcBot.character.."_skills"]
+		 npcBot.BotAbilityPriority = build[npcBot.character .."_skills"]
+	 end
+	 
+	 if npcBot.BotAbilityPriority == nil then
+		print(npcBot:GetUnitName());
+		return
 	 end
 	 
 	 if (#npcBot.BotAbilityPriority > (25 - npcBot:GetLevel())) then  
         local ability_name = npcBot.BotAbilityPriority[1];
-		--print(ability_name);
-        -- Can I slot a skill with this skill point?
 		if type(ability_name) == "string" then
 			if ability_name ~= "-1" then
 				if npcBot:HasScepter() and ability_name == "keeper_of_the_light_illuminate" then
@@ -86,49 +90,24 @@ end
 function AbilityUsageThink()
 	local npcBot = GetBot();
 	
-	if not GetBot():IsHero() then
-		return
-	 end
-	
-	local cast = {};
-	local TableAbility,_ = assembly_shop:Main();
-	
 	if ( npcBot:IsUsingAbility() or npcBot:IsChanneling()) then return end;
 	
-	for k,v in pairs(TableAbility) do
-		if v["Consider"] ~= nil and v:IsFullyCastable() then
-			tablecast[1],tablecast[2] = v["Consider"](); 
-		else
-			tablecast[1],tablecast[2] = 0, 0;
-		end
-		cast[k] = tablecast;
-	end
+	local TableAbility,_ = assembly_shop:Main();
 	
-	action_template:ActionTemplate(cast,TableAbility);
+	action_template:ActionTemplate(TableAbility);
 end
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- ---
 function ItemUsageThink()
 	local npcBot = GetBot();
-	nName = npcBot:GetUnitName();
 	--print(nName);
 	if ( npcBot:IsUsingAbility() or npcBot:IsChanneling()) then return end;
 	
 	support:UseSupportItem()
 	
-	local _,Tableitem = assembly_shop:Main();;
-	local cast = {};
+	local _,Tableitem = assembly_shop:Main();
 	
 	
-	for k,v in pairs(Tableitem) do
-		if v["Consider"] ~= nil and v:IsFullyCastable() then
-			tablecast[1],tablecast[2] = v["Consider"](); 
-		else
-			tablecast[1],tablecast[2] = 0, 0;
-		end
-		cast[k] = tablecast;
-	end
-	
-	action_template:ActionTemplate(cast,Tableitem);
+	action_template:ActionTemplate(Tableitem);
 end
 ----------------------------------------------------------------------------------------------------
 

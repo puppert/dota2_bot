@@ -35,14 +35,16 @@ function ItemPurchaseThink()
 	if npcBot == nil or npcBot.character == nil or build == nil then return end
 	
 	--translate table ,true table is GetBot().ItemTable
-	if GetBot().ItemTable == nil then
+	if npcBot.ItemTable == nil then
 		local tableItemsToBuy = build[npcBot.character.."_items"];
-		print(npcBot.character .. "...".. npcBot:GetUnitName())
+		--print(npcBot.character .. "...".. npcBot:GetUnitName())
 		if tableItemsToBuy ~= nil then
 			item_to_buy:GetItemTable(tableItemsToBuy);
 		end
 	end
     
+	if npcBot.ItemTable == nil then print(npcBot:GetUnitName()..",,,"..npcBot.character)return end
+	
     -- check if real meepo
     if( GetBot():GetUnitName() == "npc_dota_hero_meepo") then
         if(GetBot():GetLevel() > 1) then
@@ -92,7 +94,7 @@ function ItemPurchaseThink()
 	
 	
 	
-	if ( #GetBot().ItemTable == 0 )
+	if ( #npcBot.ItemTable == 0 )
 	then
 		npcBot:SetNextItemPurchaseValue( 0 );
 		return;

@@ -1,6 +1,7 @@
+X = {}
 local myutil = require(GetScriptDirectory().."/myutil")
 
-function abilityConsiderTheSwarm()
+function X:abilityConsiderTheSwarm()
 	local npcBot = GetBot()
 	
 	--print("swarm "..abilitySwarm:GetBehavior());
@@ -37,7 +38,7 @@ function abilityConsiderTheSwarm()
 	
 	return BOT_ACTION_DESIRE_NONE,0;
 end
-function abilityConsiderShukuchi()
+function X:abilityConsiderShukuchi()
 	local npcBot = GetBot();
 	
 	local abilityShukuchi = npcBot:GetAbilityByName("weaver_shukuchi");
@@ -87,7 +88,7 @@ function abilityConsiderShukuchi()
 	
 	return BOT_ACTION_DESIRE_NONE ;
 end
-function abilityConsiderTimeLapse()
+function X:abilityConsiderTimeLapse()
 	local npcBot = GetBot();
 	
 	local abilityTimeLapse = npcBot:GetAbilityByName("weaver_time_lapse")
@@ -112,3 +113,5 @@ function abilityConsiderTimeLapse()
 	
 	return BOT_ACTION_DESIRE_NONE,0;
 end
+
+return X;

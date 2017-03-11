@@ -1,9 +1,10 @@
+X = {};
 local myutil =require(GetScriptDirectory().."/myutil")
 
 function CanCastShapeDesireOnTarget( npcTarget )
 	return npcTarget:CanBeSeen() and not npcTarget:IsInvulnerable();
 end
-function abilityConsiderHowl()
+function X:abilityConsiderHowl()
 	local npcBot = GetBot();
 	
 	
@@ -16,7 +17,7 @@ function abilityConsiderHowl()
 	return BOT_ACTION_DESIRE_NONE;
 
 end
-function abilityConsiderSummonWolves()
+function X:abilityConsiderSummonWolves()
 	local npcBot = GetBot();
 	
 	local abilitySunmonWolves = npcBot:GetAbilityByName("lycan_summon_wolves")
@@ -33,7 +34,7 @@ function abilityConsiderSummonWolves()
 	
 	return BOT_ACTION_DESIRE_NONE;
 end
-function abilityConsiderShapeshift()
+function X:abilityConsiderShapeshift()
 	local npcBot = GetBot();
 	
 	local abilityShapeShift = npcBot:GetAbilityByName("lycan_shapeshift")
@@ -67,3 +68,5 @@ function abilityConsiderShapeshift()
 	
 	return BOT_ACTION_DESIRE_NONE;
 end 
+
+return X;

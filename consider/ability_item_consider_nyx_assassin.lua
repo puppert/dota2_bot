@@ -1,3 +1,4 @@
+X = {};
 local myutil = require(GetScriptDirectory() .. "/myutil")
 
 function CanUseImpale()
@@ -8,7 +9,7 @@ function CanUseImpale()
 			and not npcBot:GetTarget():IsMagicImmune();
 	end
 end
-function abilityConsiderImpale()
+function X:abilityConsiderImpale()
 	local npcBot = GetBot();
 	local abilityImpale = npcBot:GetAbilityByName("nyx_assassin_impale")
 	
@@ -120,7 +121,7 @@ function abilityConsiderImpale()
 	
 	return BOT_ACTION_DESIRE_NONE ,0;
 end
-function abilityConsiderManaBurn()
+function X:abilityConsiderManaBurn()
 	local npcBot = GetBot();
 	local abilityManaBurn = npcBot:GetAbilityByName("nyx_assassin_mana_burn")
 	
@@ -149,7 +150,7 @@ function abilityConsiderManaBurn()
 	
 	return BOT_ACTION_DESIRE_NONE, 0;
 end
-function abilityConsiderSpikedCarapace()
+function X:abilityConsiderSpikedCarapace()
 	local npcBot = GetBot();
 	local abilitySpikedCarapace = npcBot:GetAbilityByName("nyx_assassin_spiked_carapace")
 	
@@ -196,7 +197,7 @@ function abilityConsiderSpikedCarapace()
 	
 	return BOT_ACTION_DESIRE_NONE;
 end
-function abilityConsiderVendetta()
+function X:abilityConsiderVendetta()
 	local npcBot = GetBot();
 	
 	local abilityVendetta = npcBot:GetAbilityByName("nyx_assassin_vendetta")
@@ -216,7 +217,7 @@ function abilityConsiderVendetta()
 	
 	return BOT_ACTION_DESIRE_NONE;
 end
-function abilityConsiderBurrow()
+function X:abilityConsiderBurrow()
 	local npcBot = GetBot();
 	
 	local abilityBurrow = npcBot:GetAbilityByName("nyx_assassin_burrow")
@@ -234,7 +235,7 @@ function abilityConsiderBurrow()
 	
 	return BOT_ACTION_DESIRE_NONE;
 end
-function abilityConsiderUnburrow()
+function X:abilityConsiderUnburrow()
 	local npcBot = GetBot();
 	
 	local abilityUnburrow = npcBot:GetAbilityByName("nyx_assassin_unburrow")
@@ -255,3 +256,5 @@ function abilityConsiderUnburrow()
 	
 	return BOT_ACTION_DESIRE_NONE ;
 end
+
+return X;

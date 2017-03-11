@@ -1,8 +1,7 @@
 local ability_factory = require(GetScriptDirectory().."/factory/ability_factory")
 local item_factory = require(GetScriptDirectory().."/factory/item_factory")
 
-
-local X = {};
+ X = {};
 
 function X:Main()
 	if self.script == nil then
@@ -14,6 +13,7 @@ end
 
 
 function X:GetPakage()
+	print(type(io))
 	if self.heroname == nil then
 		self.heroname = {};
 	end
@@ -26,9 +26,10 @@ function X:GetPakage()
 	for _,id in ipairs(GetTeamPlayers(TEAM_DIRE)) do 
 		table.insert(self.heroname,GetSelectedHeroName(id));
 	end
-	for	k.v in ipairs(self.heroname) do 
+	for	k,v in ipairs(self.heroname) do 
 		local scriptname = string.gsub(v,"npc_dota_hero_","ability_item_consider_");
-		local script = require(GetScriptDirectory().."/consider/"..scriptname);
+		local filename = GetScriptDirectory().."/consider/"..scriptname;
+		local script = require(filename);
 		self.script[v] = script;
 	end
 	self.generic_script =  require(GetScriptDirectory().."/consider/ability_item_consider_generic");
@@ -75,7 +76,7 @@ function X:Unpack()
 				self.ability[name] = fuc;
 			end
 			if string.find(name,"item") ~= nil then
-				GetBot().items[name] == fuc;
+				GetBot().items[name] = fuc;
 			end
 		end
 	end

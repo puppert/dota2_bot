@@ -1,7 +1,8 @@
+X = {};
 local myutil = require(GetScriptDirectory() .. "/myutil")
 
 
-function abilityConsiderDeathCoil()
+function X:abilityConsiderDeathCoil()
 	local npcBot = GetBot();
 	local abilityDeathCoil = npcBot:GetAbilityByName("abaddon_death_coil");
 	
@@ -66,7 +67,7 @@ function abilityConsiderDeathCoil()
 	end
 	return BOT_ACTION_DESIRE_NONE,0
 end
-function abilityConsiderAphoticShield()
+function X:abilityConsiderAphoticShield()
 	local npcBot = GetBot();
 	local abilityAphoticShield = npcBot:GetAbilityByName("abaddon_aphotic_shield"); 
 	
@@ -116,3 +117,5 @@ function abilityConsiderAphoticShield()
 	
 	return BOT_ACTION_DESIRE_MODERATE,0
 end
+
+return X

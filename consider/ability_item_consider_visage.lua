@@ -1,3 +1,4 @@
+X = {};
 local myutil = require(GetScriptDirectory().."/myutil")
 
 
@@ -15,7 +16,7 @@ function CompareHp(a,b)
 	return a:GetHealth() > b:GetHealth();
 end
 -----------------------------------------------------------------------------------------------------------
-function abilityConsiderGraveChill()
+function X:abilityConsiderGraveChill()
 	local npcBot = GetBot();
 	local abilityGraveChill = npcBot:GetAbilityByName("visage_grave_chill")
 	
@@ -59,7 +60,7 @@ function abilityConsiderGraveChill()
 	return BOT_ACTION_DESIRE_NONE,0;
 end
 ---------------------------------------------------------------------------------------------------------
-function abilityConsiderSoulAssumption()
+function X:abilityConsiderSoulAssumption()
 	local npcBot = GetBot();
 	local abilitySoulAssumption = npcBot:GetAbilityByName("visage_soul_assumption")
 	
@@ -114,7 +115,7 @@ function abilityConsiderSoulAssumption()
 	return BOT_ACTION_DESIRE_NONE,0;
 end
 ----------------------------------------------------------------------------------------------------
-function abilityConsiderSummonFamiliars()
+function X:abilityConsiderSummonFamiliars()
 	local npcBot = GetBot();
 	local abilitySummonFamiliars = npcBot:GetAbilityByName("visage_summon_familiars")
 	
@@ -130,3 +131,5 @@ function abilityConsiderSummonFamiliars()
 	
 	return BOT_ACTION_DESIRE_NONE;
 end
+
+return X;

@@ -1,4 +1,4 @@
-local PM = require(string.gsub(GetScriptDirectory(),"state/minion_ability_state","template") .. "/state_template");
+local PM = require(GetScriptDirectory() .. "/template/state_template");
 local M = PM:New();
 M.hName = "npc_dota_necronomicon_archer";
 M.aName = "necronomicon_archer_mana_burn";

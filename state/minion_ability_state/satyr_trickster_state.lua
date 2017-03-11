@@ -1,4 +1,4 @@
-local PM = require(string.gsub(GetScriptDirectory(),"state/minion_ability_state","template") .. "/state_template");
+local PM = require(GetScriptDirectory() .. "/template/state_template");
 local M = PM:New();
 local NS = require(GetScriptDirectory() .. "/forest_troll_high_priest_state");
 M.hName = "npc_dota_neutral_satyr_trickster";
