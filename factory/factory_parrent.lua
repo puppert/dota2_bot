@@ -11,9 +11,6 @@ function Factory:CreatTable()
 	local count = 0;
 	while true do
 		local object = self:GetObject(count);
-		-- if object ~= nil then
-			-- --print(object:GetName());
-		-- end
 		if self:SetCondition(object) then
 			local heroname = string.gsub(GetBot():GetUnitName(),"npc_dota_hero_","");
 			local  name = string.gsub(object:GetName(),heroname,"ability");
@@ -21,7 +18,11 @@ function Factory:CreatTable()
 													return string.upper(string.sub(s,2))
 													end
 													)
-			tables[finalname] = object;
+			if object:IsTalent() then
+				table.insert(tables,object);
+			else
+				tables[finalname] = object;
+			end
 		elseif self:SetBreakCondition(object) then
 			break;
 		end

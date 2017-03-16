@@ -6,8 +6,7 @@ State.nextstate = "";
 
 function State:New(o)
 	o = o or {};
-	setmetatable(o,self)
-	self._index = self;
+	setmetatable(o,{__index = self})
 	return o;
 end
 

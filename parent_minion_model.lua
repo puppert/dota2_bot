@@ -1,6 +1,6 @@
 _G._savedEnvMinion = getfenv()
 module( "parent_minion_model", package.seeall )
-local monion = require(GetScriptDirectory() .. "/minion");
+local minion = require(GetScriptDirectory() .. "/minion");
 local necronomicon_archer = require(GetScriptDirectory() .. "/state/minion_ability_state/necronomicon_archer_state");
 ----------------------------------------------------------------------------------------
 --[==[

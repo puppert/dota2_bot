@@ -7,7 +7,7 @@ end
 function X:abilityConsiderHowl()
 	local npcBot = GetBot();
 	
-	
+	--print("use howl")
 	local abilityHowl = npcBot:GetAbilityByName("lycan_howl")
 	-- Make sure it's castable
 	if ( abilityHowl:IsFullyCastable() and not npcBot:IsUsingAbility()) then 
